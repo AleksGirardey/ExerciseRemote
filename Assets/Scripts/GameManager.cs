@@ -100,6 +100,7 @@ namespace Completed
 
 			_winner = 0;
 			
+			PlayerManager.instance.InitPlayerManager();
 		}
 		
 		
