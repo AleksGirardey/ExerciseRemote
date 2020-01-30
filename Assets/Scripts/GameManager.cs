@@ -97,6 +97,8 @@ namespace Completed
 			
 			//Call the SetupScene function of the BoardManager script, pass it current level number.
 			boardScript.SetupScene(level);
+
+			_winner = 0;
 			
 		}
 		
@@ -175,6 +177,15 @@ namespace Completed
 			
 			//Enemies are done moving, set enemiesMoving to false.
 			enemiesMoving = false;
+		}
+
+		private int _winner = 0;
+		public void Restart(Player player){
+			_winner++;
+			if(_winner == 2){
+            	SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
+			}
+			Destroy(player.gameObject);
 		}
 	}
 }
