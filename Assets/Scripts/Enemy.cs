@@ -12,7 +12,7 @@ namespace Completed
 		
 		
 		private Animator animator;							//Variable of type Animator to store a reference to the enemy's Animator component.
-		private Transform target;							//Transform to attempt to move toward each turn.
+		private GameObject[] targets;							//Transform to attempt to move toward each turn.
 		private bool skipMove;								//Boolean to determine whether or not enemy should skip a turn or move this turn.
 		
 		
@@ -27,7 +27,7 @@ namespace Completed
 			animator = GetComponent<Animator> ();
 			
 			//Find the Player GameObject using it's tag and store a reference to its transform component.
-			target = GameObject.FindGameObjectWithTag ("Player").transform;
+			targets = GameObject.FindGameObjectsWithTag ("Player");
 			
 			//Call the start function of our base class MovingObject.
 			base.Start ();
@@ -61,18 +61,33 @@ namespace Completed
 			//These values allow us to choose between the cardinal directions: up, down, left and right.
 			int xDir = 0;
 			int yDir = 0;
-			
+
+			//Detect Target
+			Vector3 target = Vector3.zero;
+			float dist = 0;
+			for(int i = 0; i < targets.Length; i++){
+				if(targets[i]){
+					if(dist == 0){
+						dist = Vector3.Distance(transform.position,targets[i].transform.position);
+						target = targets[i].transform.position;
+					}else{
+						if(dist > Vector3.Distance(transform.position,targets[i].transform.position)){
+							dist = Vector3.Distance(transform.position,targets[i].transform.position);
+							target = targets[i].transform.position;
+						}
+					}
+				}
+			}
 			//If the difference in positions is approximately zero (Epsilon) do the following:
-			if(Mathf.Abs (target.position.x - transform.position.x) < float.Epsilon)
+			if(Mathf.Abs (target.x - transform.position.x) < float.Epsilon)
 				
 				//If the y coordinate of the target's (player) position is greater than the y coordinate of this enemy's position set y direction 1 (to move up). If not, set it to -1 (to move down).
-				yDir = target.position.y > transform.position.y ? 1 : -1;
+				yDir = target.y > transform.position.y ? 1 : -1;
 			
 			//If the difference in positions is not approximately zero (Epsilon) do the following:
 			else
 				//Check if target x position is greater than enemy's x position, if so set x direction to 1 (move right), if not set to -1 (move left).
-				xDir = target.position.x > transform.position.x ? 1 : -1;
-			
+				xDir = target.x > transform.position.x ? 1 : -1;
 			//Call the AttemptMove function and pass in the generic parameter Player, because Enemy is moving and expecting to potentially encounter a Player
 			AttemptMove <Player> (xDir, yDir);
 		}
