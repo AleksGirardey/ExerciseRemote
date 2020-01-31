@@ -137,8 +137,14 @@ namespace Completed
 				GameObject tileChoice = tileArray[Random.Range (0, tileArray.Length)];
 				
 				//Instantiate tileChoice at the position returned by RandomPosition with no change in rotation
-				Instantiate(tileChoice, randomPosition, Quaternion.identity);
+				GameObject objectChoice = Instantiate(tileChoice, randomPosition, Quaternion.identity);
+				objectChoice.transform.SetParent(boardHolder);
 			}
+		}
+
+		public void PlacementBoard(){
+			Debug.Log((currentColumns)+"  "+(rows.maximum - currentRows));
+			boardHolder.transform.position = new Vector3(Mathf.CeilToInt(currentColumns/2),Mathf.CeilToInt(currentRows/2),0);
 		}
 		
 		
@@ -162,7 +168,7 @@ namespace Completed
 			
 			//Instantiate a random number of enemies based on minimum and maximum, at randomized positions.
 			LayoutObjectAtRandom (enemyTiles, enemyCount, enemyCount);
-			
+			PlacementBoard();
 			//Instantiate the exit tile in the upper right hand corner of our game board
 			Instantiate (exit, new Vector3 (currentColumns - 1, currentRows - 1, 0f), Quaternion.identity);
 		}

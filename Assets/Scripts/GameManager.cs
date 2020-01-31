@@ -202,7 +202,7 @@ namespace Completed
 			}else if(foodChange == -1){
 				foodText.text = "Food: " + _food;
 			}else{
-				foodText.text = "-"+ foodChange + " Food: " + _food;
+				foodText.text = foodChange + " Food: " + _food;
 			}
 		}
 
