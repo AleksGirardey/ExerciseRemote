@@ -25,6 +25,8 @@ namespace Completed
 		private bool doingSetup = true;							//Boolean to check if we're setting up board, prevent Player from moving during setup.
 		
 		
+		public Text foodText;
+		private int _food;
 		
 		//Awake is always called before any Start functions
 		void Awake()
@@ -82,7 +84,10 @@ namespace Completed
 			
 			//Get a reference to our text LevelText's text component by finding it by name and calling GetComponent.
 			levelText = GameObject.Find("LevelText").GetComponent<Text>();
-			
+
+			foodText = GameObject.Find("FoodText").GetComponent<Text>();
+			_food = playerFoodPoints;
+			foodText.text = "Food: " + _food;
 			//Set the text of levelText to the string "Day" and append the current level number.
 			levelText.text = "Day " + level;
 			
@@ -183,10 +188,26 @@ namespace Completed
 		private int _winner = 0;
 		public void Restart(Player player){
 			_winner++;
+			playerFoodPoints = _food;
 			if(_winner == 2){
             	SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
 			}
 			Destroy(player.gameObject);
+		}
+
+		public void FoodChange(int foodChange){
+			_food += foodChange;
+			if(foodChange > 0){
+				foodText.text = "+" + foodChange + " Food: " + _food;
+			}else if(foodChange == -1){
+				foodText.text = "Food: " + _food;
+			}else{
+				foodText.text = "-"+ foodChange + " Food: " + _food;
+			}
+		}
+
+		public int GetFood(){
+			return _food;
 		}
 	}
 }

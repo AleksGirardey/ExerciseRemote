@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Completed {
     public class PlayerManager : MonoBehaviour {
@@ -96,25 +97,18 @@ namespace Completed {
 						vertical = y > 0 ? 1 : -1;
 				}
 			}
-			
 #endif //End of mobile platform dependendent compilation section started above with #elif
+			
+			
+			CheckDisplayPlayers();
 			//Check if we have a non-zero value for horizontal or vertical
 			if(horizontal != 0 || vertical != 0) {
 				//Call AttemptMove passing in the generic parameter Wall, since that is what Player may interact with if they encounter one (by attacking it)
 				//Pass in horizontal and vertical as parameters to specify the direction to move Player in.
+				GetCurrentPlayer().AttemptMove(horizontal, vertical);
 				if (playerOneTurn) {
-					if(playerOne == null){
-						playerTwo.AttemptMove(horizontal, vertical);
-					}else{
-						playerOne.AttemptMove(horizontal, vertical);
-					}
 					playerOneTurn = false;
 				} else {
-					if(playerTwo == null){
-						playerOne.AttemptMove(horizontal, vertical);
-					}else{
-						playerTwo.AttemptMove(horizontal, vertical);
-					}
 					playerOneTurn = true;
 				}
 			}
@@ -124,5 +118,40 @@ namespace Completed {
 	        playerOne = GameObject.Find("PlayerOne").GetComponent<Player>();
 	        playerTwo = GameObject.Find("PlayerTwo").GetComponent<Player>();
         }
+
+		public Player GetCurrentPlayer(){
+			if (playerOneTurn) {
+				if(playerOne == null){
+					return playerTwo;
+				}else{
+					return playerOne;
+				}
+			} else {
+				if(playerTwo == null){
+					return playerOne;
+				}else{
+					return playerTwo;
+				}
+			}
+		}
+		public void CheckDisplayPlayers(){
+			if(!GetCurrentPlayer().displayPlayer.activeSelf){
+				if(playerOneTurn){
+					if(playerOne){
+						playerOne.displayPlayer.SetActive(true);
+					}
+					if(playerTwo){
+						playerTwo.displayPlayer.SetActive(false);
+					}
+				}else{
+					if(playerOne){
+						playerOne.displayPlayer.SetActive(false);
+					}
+					if(playerTwo){
+						playerTwo.displayPlayer.SetActive(true);
+					}
+				}
+			}
+		}
     }
 }
