@@ -145,6 +145,10 @@ namespace Completed
 		public void PlacementBoard(){
 			Debug.Log((currentColumns)+"  "+(rows.maximum - currentRows));
 			boardHolder.transform.position = new Vector3(Mathf.CeilToInt(currentColumns/2),Mathf.CeilToInt(currentRows/2),0);
+			GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+			for(int i= 0; i < players.Length; i++){
+				players[i].transform.parent = boardHolder.transform;
+			}
 		}
 		
 		
@@ -170,7 +174,13 @@ namespace Completed
 			LayoutObjectAtRandom (enemyTiles, enemyCount, enemyCount);
 			PlacementBoard();
 			//Instantiate the exit tile in the upper right hand corner of our game board
-			Instantiate (exit, new Vector3 (currentColumns - 1, currentRows - 1, 0f), Quaternion.identity);
+			GameObject exitObject = Instantiate (exit, new Vector3 (currentColumns - 1, currentRows - 1, 0f), Quaternion.identity);
+			exitObject.transform.parent = boardHolder.transform;
+			FinalSetup();
+		}
+
+		public void FinalSetup(){
+			boardHolder.transform.position = new Vector3(8,3,0);
 		}
 	}
 }
